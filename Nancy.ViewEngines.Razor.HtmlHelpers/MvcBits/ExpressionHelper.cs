@@ -70,6 +70,15 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpersUnofficial.MvcBits
                 nameParts.Pop();
             }
 
+            if (nameParts.Count > 2)
+            {
+                while (nameParts.Count > 1)
+                {
+                    nameParts.Pop();
+                }
+                return nameParts.Pop().TrimStart('.');
+            }
+
             if (nameParts.Count > 0)
             {
                 return nameParts.Aggregate((left, right) => left + right).TrimStart('.');

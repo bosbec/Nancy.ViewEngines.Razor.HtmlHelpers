@@ -12,7 +12,7 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpers.Tests
 
         public HtmlHelpersSelectExtensionsFixture()
         {
-            this.model = new TestModel { TestEnum = SelectListItemExtensionsFixture.TestEnum.Two };
+            this.model = new TestModel { TestEnum = SelectListItemExtensionsFixture.TestEnum.Two, TestNested = new SelectListItemExtensionsFixture.TestNestedModel()};
             this.helpers = new HtmlHelpers<TestModel>(null, null, model);
             this.defaultOption = SelectListItemExtensionsFixture.TestEnum.Three.ToString();
         }
