@@ -2,6 +2,9 @@
 
 namespace Nancy.ViewEngines.Razor.HtmlHelpers.Tests
 {
+    using System;
+    using System.Collections.Generic;
+
     using Xunit;
     using System.Linq;
 
@@ -31,6 +34,18 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpers.Tests
         public enum TestEnum
         {
             One, Two, Three
+        }
+
+        public class TestNestedModel
+        {
+            public LevelTwo LevelTwo = new LevelTwo();
+        }
+
+        public class LevelTwo
+        {
+            public Guid LevelTwoGuid = Guid.NewGuid();
+
+            public IEnumerable<SelectListItem> LevelTwoListItems = new[] { new SelectListItem { Value = "LEVEL_TWO_VALUE", Text = "LEVEL_TWO_TEXT" } };
         }
     }
 }

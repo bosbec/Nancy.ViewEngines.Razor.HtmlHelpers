@@ -36,9 +36,19 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpers.Tests
             Assert.Contains("<option selected=\"selected\" value=\"Two\">Two</option>", output.ToHtmlString());
         }
 
+        [Fact]
+        public void When_provided_items_generated_from_nested()
+        {
+            var output = helpers.DropDownListFor(x => x.TestNested.LevelTwo.LevelTwoGuid, model.TestNested.LevelTwo.LevelTwoListItems, new { });
+
+            Assert.Contains("<select id=\"LevelTwoGuid\" name=\"LevelTwoGuid\">", output.ToHtmlString());
+            Assert.Contains("<option value=\"LEVEL_TWO_VALUE\">LEVEL_TWO_TEXT</option>", output.ToHtmlString());
+        }
+
         public class TestModel
         {
             public SelectListItemExtensionsFixture.TestEnum TestEnum { get; set; }
+            public SelectListItemExtensionsFixture.TestNestedModel TestNested { get; set; }
         }
     }
 }
