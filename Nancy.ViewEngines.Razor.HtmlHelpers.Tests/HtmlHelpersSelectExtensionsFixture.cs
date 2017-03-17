@@ -12,7 +12,10 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpers.Tests
 
         public HtmlHelpersSelectExtensionsFixture()
         {
-            this.model = new TestModel { TestEnum = SelectListItemExtensionsFixture.TestEnum.Two, TestNested = new SelectListItemExtensionsFixture.TestNestedModel()};
+            this.model = new TestModel { TestEnum = SelectListItemExtensionsFixture.TestEnum.Two,
+                TestNested = new SelectListItemExtensionsFixture.TestNestedModel(),
+                TestDisplayName = new SelectListItemExtensionsFixture.TestDisplayNameModel()
+            };
             this.helpers = new HtmlHelpers<TestModel>(null, null, model);
             this.defaultOption = SelectListItemExtensionsFixture.TestEnum.Three.ToString();
         }
@@ -45,10 +48,33 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpers.Tests
             Assert.Contains("<option value=\"LEVEL_TWO_VALUE\">LEVEL_TWO_TEXT</option>", output.ToHtmlString());
         }
 
+
+        [Fact]
+        public void When_provided_item_with_displayname_label()
+        {
+            var output = helpers.LabelFor(x => x.TestDisplayName.IdWithDisplayName, new { });
+            var outputLvlTwo = helpers.LabelFor(x => x.TestDisplayName.LevelTwo.WithDisplayName, new { });
+
+            Assert.Contains("<label for=\"TestDisplayName.IdWithDisplayName\">WithDisplayName</label>", output.ToHtmlString());
+            Assert.Contains("<label for=\"TestDisplayName.LevelTwo.WithDisplayName\">WithDisplayName</label>", outputLvlTwo.ToHtmlString());
+
+        }
+
+        [Fact]
+        public void When_provided_item_without_displayname_label()
+        {
+            var output = helpers.LabelFor(x => x.TestDisplayName.IdWithoutDisplayName, new { });
+            var outputLvlTwo = helpers.LabelFor(x => x.TestDisplayName.LevelTwo.WithoutDisplayName, new { });
+
+            Assert.Contains("<label for=\"TestDisplayName.IdWithoutDisplayName\">TestDisplayName.IdWithoutDisplayName</label>", output.ToHtmlString());
+            Assert.Contains("<label for=\"TestDisplayName.LevelTwo.WithoutDisplayName\">TestDisplayName.WithoutDisplayName</label>", outputLvlTwo.ToHtmlString());
+        }
+
         public class TestModel
         {
             public SelectListItemExtensionsFixture.TestEnum TestEnum { get; set; }
             public SelectListItemExtensionsFixture.TestNestedModel TestNested { get; set; }
+            public SelectListItemExtensionsFixture.TestDisplayNameModel TestDisplayName { get; set; }
         }
     }
 }

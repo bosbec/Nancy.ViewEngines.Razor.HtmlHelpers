@@ -4,6 +4,7 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpers.Tests
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
 
     using Xunit;
     using System.Linq;
@@ -38,14 +39,35 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpers.Tests
 
         public class TestNestedModel
         {
-            public LevelTwo LevelTwo = new LevelTwo();
+            [DisplayName("TestName")]
+            public LevelTwo LevelTwo { get; set; } =  new LevelTwo();
         }
 
         public class LevelTwo
         {
-            public Guid LevelTwoGuid = Guid.NewGuid();
+            public Guid LevelTwoGuid { get; set; } =  Guid.NewGuid();
 
             public IEnumerable<SelectListItem> LevelTwoListItems = new[] { new SelectListItem { Value = "LEVEL_TWO_VALUE", Text = "LEVEL_TWO_TEXT" } };
         }
+
+        public class TestDisplayNameModel
+        {
+            [DisplayName("WithDisplayName")]
+            public Guid IdWithDisplayName { get; set; }
+
+            public Guid IdWithoutDisplayName { get; set; }
+
+            public TestDisplayNameModelLevelTwo LevelTwo { get; set; }
+        }
+
+        public class TestDisplayNameModelLevelTwo
+        {
+            [DisplayName("WithDisplayName")]
+            public string WithDisplayName { get; set; }
+
+            public string WithoutDisplayName { get; set; }
+        }
     }
+
+    
 }

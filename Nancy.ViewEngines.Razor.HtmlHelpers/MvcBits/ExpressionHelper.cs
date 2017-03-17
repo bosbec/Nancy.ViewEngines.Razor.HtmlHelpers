@@ -34,7 +34,7 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpersUnofficial.MvcBits
                         break;
                     }
 
-                    nameParts.Push(GetIndexerInvocation(methodExpression.Arguments.Single(),expression.Parameters.ToArray()));
+                    nameParts.Push(GetIndexerInvocation(methodExpression.Arguments.Single(), expression.Parameters.ToArray()));
                     part = methodExpression.Object;
                 }
                 else if (part.NodeType == ExpressionType.ArrayIndex)
@@ -68,15 +68,6 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpersUnofficial.MvcBits
             if (nameParts.Count > 0 && String.Equals(nameParts.Peek(), ".model", StringComparison.OrdinalIgnoreCase))
             {
                 nameParts.Pop();
-            }
-
-            if (nameParts.Count > 2)
-            {
-                while (nameParts.Count > 1)
-                {
-                    nameParts.Pop();
-                }
-                return nameParts.Pop().TrimStart('.');
             }
 
             if (nameParts.Count > 0)
