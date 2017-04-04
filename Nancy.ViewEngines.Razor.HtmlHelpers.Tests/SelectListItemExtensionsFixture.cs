@@ -40,30 +40,12 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpers.Tests
         public class TestNestedModel
         {
             [DisplayName("TestName")]
-            public LevelTwo LevelTwo { get; set; } =  new LevelTwo();
+            public LevelTwo LevelTwo { get; set; }
         }
 
         public class LevelTwo
         {
-            public Guid LevelTwoGuid
-            {
-                get
-                {
-                    if (LevelTwoGuid == Guid.Empty)
-                    {
-                        LevelTwoGuid = Guid.NewGuid();
-                        return LevelTwoGuid;
-                    }
-
-                    return LevelTwoGuid;
-                }
-
-                set
-                {
-                    LevelTwoGuid = value;
-                }
-            }
-
+            public Guid LevelTwoGuid { get; set; }
 
             public IEnumerable<SelectListItem> LevelTwoListItems = new[] { new SelectListItem { Value = "LEVEL_TWO_VALUE", Text = "LEVEL_TWO_TEXT" } };
         }
