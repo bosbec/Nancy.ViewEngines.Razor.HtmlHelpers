@@ -47,43 +47,32 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpersUnofficial
             return Label(helper, labelText, labelFor, TypeHelper.ObjectToDictionary(attributes));
         }
 
-        private static string GetProperty()
-        {
+        //private static string GetProperty()
+        //{
 
-        }
+        //}
 
-        private static string GetDisplayNameFor(object obj, string propertyToGetNameFor)
+        private static string GetDisplayNameFor(object obj, string propertyToGetDisplayNameFor)
         {
-            // TODO: koll för null
-            if (propertyToGetNameFor.Contains("."))
+            if (propertyToGetDisplayNameFor.Contains("."))
             {
-                var propNames = propertyToGetNameFor.Split('.');
-                var nameParts = new Queue<string>();
+                var propertyList = propertyToGetDisplayNameFor.Split('.').ToList();
+                var propertyToCheck = propertyList.FirstOrDefault();
+                propertyList.RemoveAll(x => x.Equals(propertyToCheck));
 
-                foreach (var proppy in propNames)
+                var property = obj.GetType().GetProperties().FirstOrDefault(x => x.Name == propertyToCheck);
+                if (property != null)
                 {
-                    nameParts.Enqueue(proppy);
-                }
+                    var nextLevel = property.GetValue(obj, null);
+                    var properties = string.Join(".", propertyList.Select(x => x));
 
-                PropertyInfo propInfo;
-                while (nameParts.Count > 0)
-                {
-                    var objType = obj.GetType();
-                    propInfo = objType.GetProperty(nameParts.Dequeue());
-                    var val = propInfo.GetValue(obj, null);
+                    return GetDisplayNameFor(nextLevel, properties);
                 }
-
-                //var propertName = propertyToGetNameFor.Substring(0, propertyToGetNameFor.IndexOf("."));
-                //var property = obj.GetType().GetProperties().FirstOrDefault(x => x.Name == propertName);
-                //// todo null-check
-                //var val = property.GetValue(obj, null);
-                
-                return GetDisplayNameFor("", propertyToGetNameFor.Substring(propertyToGetNameFor.IndexOf(".") + 1));
             }
 
             var attribute =
                 obj.GetType()
-                    .GetProperty(propertyToGetNameFor)
+                    .GetProperty(propertyToGetDisplayNameFor)
                     .GetCustomAttributes(typeof(DisplayNameAttribute), true)
                     .FirstOrDefault();
 
@@ -92,24 +81,25 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpersUnofficial
 
         public static IHtmlString Label<TModel>(this HtmlHelpers<TModel> helper, string labelText, string labelFor, IDictionary<string, object> attributes)
         {
-            var displayName = string.Empty;
+            string displayName = GetDisplayNameFor(helper.Model, labelText);
 
-            displayName = GetDisplayNameFor(helper.Model, labelText);
-
-            if (String.IsNullOrEmpty(displayName) && string.IsNullOrWhiteSpace(labelText))
+            if (string.IsNullOrEmpty(displayName) && string.IsNullOrWhiteSpace(labelText))
             {
                 throw new ArgumentException("Argument_Cannot_Be_Null_Or_Empty", "labelText");
             }
 
             labelFor = labelFor ?? labelText;
-            labelText = displayName ?? labelText;
+            if (!string.IsNullOrEmpty(displayName))
+            {
+                labelText = displayName;
+            }
 
             var tag = new TagBuilder("label")
             {
-                InnerHtml = String.IsNullOrEmpty(labelText) ? String.Empty : HttpUtility.HtmlEncode(labelText)
+                InnerHtml = string.IsNullOrEmpty(labelText) ? string.Empty : HttpUtility.HtmlEncode(labelText)
             };
 
-            if (!String.IsNullOrEmpty(labelFor))
+            if (!string.IsNullOrEmpty(labelFor))
             {
                 tag.MergeAttribute("for", labelFor);
             }

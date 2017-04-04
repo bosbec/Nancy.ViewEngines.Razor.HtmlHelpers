@@ -45,7 +45,25 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpers.Tests
 
         public class LevelTwo
         {
-            public Guid LevelTwoGuid { get; set; } =  Guid.NewGuid();
+            public Guid LevelTwoGuid
+            {
+                get
+                {
+                    if (LevelTwoGuid == Guid.Empty)
+                    {
+                        LevelTwoGuid = Guid.NewGuid();
+                        return LevelTwoGuid;
+                    }
+
+                    return LevelTwoGuid;
+                }
+
+                set
+                {
+                    LevelTwoGuid = value;
+                }
+            }
+
 
             public IEnumerable<SelectListItem> LevelTwoListItems = new[] { new SelectListItem { Value = "LEVEL_TWO_VALUE", Text = "LEVEL_TWO_TEXT" } };
         }
@@ -57,7 +75,8 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpers.Tests
 
             public Guid IdWithoutDisplayName { get; set; }
 
-            public TestDisplayNameModelLevelTwo LevelTwo { get; set; }
+            public TestDisplayNameModelLevelTwo TestDisplayNameModelLevelTwo { get; set; }
+
         }
 
         public class TestDisplayNameModelLevelTwo
