@@ -63,7 +63,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HtmlHelpersLabelExtensionsFixture.cs" />
     <Compile Include="HtmlHelpersSelectExtensionsFixture.cs" />
+    <Compile Include="LabelExtensionsFixture.cs" />
     <Compile Include="SelectListItemExtensionsFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

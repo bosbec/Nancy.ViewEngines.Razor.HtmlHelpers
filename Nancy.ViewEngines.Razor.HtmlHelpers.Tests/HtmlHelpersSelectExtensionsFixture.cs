@@ -15,15 +15,7 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpers.Tests
         public HtmlHelpersSelectExtensionsFixture()
         {
             this.model = new TestModel { TestEnum = SelectListItemExtensionsFixture.TestEnum.Two,
-                TestNested = new SelectListItemExtensionsFixture.TestNestedModel {LevelTwo = new SelectListItemExtensionsFixture.LevelTwo { LevelTwoGuid = Guid.NewGuid() } },
-                TestDisplayName = new SelectListItemExtensionsFixture.TestDisplayNameModel { TestDisplayNameModelLevelTwo = new SelectListItemExtensionsFixture.TestDisplayNameModelLevelTwo
-                {
-                    WithDisplayName = "WithDisplayName",
-                    WithoutDisplayName = "WithoutDisplayName"
-                },
-                IdWithDisplayName = Guid.NewGuid(),
-                IdWithoutDisplayName = Guid.NewGuid()
-            }
+                TestNested = new SelectListItemExtensionsFixture.TestNestedModel { LevelTwo = new SelectListItemExtensionsFixture.NestedLevelTwo { NestedLevelTwoGuid = Guid.NewGuid() } },
             };
             this.helpers = new HtmlHelpers<TestModel>(null, null, model);
             this.defaultOption = SelectListItemExtensionsFixture.TestEnum.Three.ToString();
@@ -51,38 +43,16 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpers.Tests
         [Fact]
         public void When_provided_items_generated_from_nested()
         {
-            var output = helpers.DropDownListFor(x => x.TestNested.LevelTwo.LevelTwoGuid, model.TestNested.LevelTwo.LevelTwoListItems, new { });
+            var output = helpers.DropDownListFor(x => x.TestNested.LevelTwo.NestedLevelTwoGuid, model.TestNested.LevelTwo.LevelTwoListItems, new { });
 
-            Assert.Contains("<select id=\"TestNested_LevelTwo_LevelTwoGuid\" name=\"TestNested.LevelTwo.LevelTwoGuid\">", output.ToHtmlString());
+            Assert.Contains("<select id=\"TestNested_LevelTwo_NestedLevelTwoGuid\" name=\"TestNested.LevelTwo.NestedLevelTwoGuid\">", output.ToHtmlString());
             Assert.Contains("<option value=\"LEVEL_TWO_VALUE\">LEVEL_TWO_TEXT</option>", output.ToHtmlString());
-        }
-
-        [Fact]
-        public void When_provided_item_with_displayname_label()
-        {
-            var output = helpers.LabelFor(x => x.TestDisplayName.IdWithDisplayName, new { });
-            var outputLvlTwo = helpers.LabelFor(x => x.TestDisplayName.TestDisplayNameModelLevelTwo.WithDisplayName, new { });
-
-            Assert.Contains("<label for=\"TestDisplayName.IdWithDisplayName\">WithDisplayName</label>", output.ToHtmlString());
-            Assert.Contains("<label for=\"TestDisplayName.TestDisplayNameModelLevelTwo.WithDisplayName\">WithDisplayName</label>", outputLvlTwo.ToHtmlString());
-
-        }
-
-        [Fact]
-        public void When_provided_item_without_displayname_label()
-        {
-            var output = helpers.LabelFor(x => x.TestDisplayName.IdWithoutDisplayName, new { });
-            var outputLvlTwo = helpers.LabelFor(x => x.TestDisplayName.TestDisplayNameModelLevelTwo.WithoutDisplayName, new { });
-
-            Assert.Contains("<label for=\"TestDisplayName.IdWithoutDisplayName\">TestDisplayName.IdWithoutDisplayName</label>", output.ToHtmlString());
-            Assert.Contains("<label for=\"TestDisplayName.TestDisplayNameModelLevelTwo.WithoutDisplayName\">TestDisplayName.TestDisplayNameModelLevelTwo.WithoutDisplayName</label>", outputLvlTwo.ToHtmlString());
         }
 
         public class TestModel
         {
             public SelectListItemExtensionsFixture.TestEnum TestEnum { get; set; }
             public SelectListItemExtensionsFixture.TestNestedModel TestNested { get; set; }
-            public SelectListItemExtensionsFixture.TestDisplayNameModel TestDisplayName { get; set; }
         }
     }
 }

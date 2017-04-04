@@ -40,28 +40,27 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpers.Tests
         public class TestNestedModel
         {
             [DisplayName("TestName")]
-            public LevelTwo LevelTwo { get; set; }
+            public NestedLevelTwo LevelTwo { get; set; }
         }
 
-        public class LevelTwo
+        public class NestedLevelTwo
         {
-            public Guid LevelTwoGuid { get; set; }
+            public Guid NestedLevelTwoGuid { get; set; }
 
             public IEnumerable<SelectListItem> LevelTwoListItems = new[] { new SelectListItem { Value = "LEVEL_TWO_VALUE", Text = "LEVEL_TWO_TEXT" } };
         }
 
-        public class TestDisplayNameModel
+        public class TestDisplayNameNestedModel
         {
             [DisplayName("WithDisplayName")]
             public Guid IdWithDisplayName { get; set; }
 
             public Guid IdWithoutDisplayName { get; set; }
 
-            public TestDisplayNameModelLevelTwo TestDisplayNameModelLevelTwo { get; set; }
-
+            public TestDisplayNameNestedModelLevelTwo TestDisplayNameModelLevelTwo { get; set; }
         }
 
-        public class TestDisplayNameModelLevelTwo
+        public class TestDisplayNameNestedModelLevelTwo
         {
             [DisplayName("WithDisplayName")]
             public string WithDisplayName { get; set; }
@@ -69,6 +68,4 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpers.Tests
             public string WithoutDisplayName { get; set; }
         }
     }
-
-    
 }
