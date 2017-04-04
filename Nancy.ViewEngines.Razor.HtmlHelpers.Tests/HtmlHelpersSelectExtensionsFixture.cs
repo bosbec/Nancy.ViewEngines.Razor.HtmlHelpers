@@ -15,7 +15,7 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpers.Tests
         public HtmlHelpersSelectExtensionsFixture()
         {
             this.model = new TestModel { TestEnum = SelectListItemExtensionsFixture.TestEnum.Two,
-                TestNested = new SelectListItemExtensionsFixture.TestNestedModel(),
+                TestNested = new SelectListItemExtensionsFixture.TestNestedModel {LevelTwo = new SelectListItemExtensionsFixture.LevelTwo { LevelTwoGuid = Guid.NewGuid() } },
                 TestDisplayName = new SelectListItemExtensionsFixture.TestDisplayNameModel { TestDisplayNameModelLevelTwo = new SelectListItemExtensionsFixture.TestDisplayNameModelLevelTwo
                 {
                     WithDisplayName = "WithDisplayName",
@@ -48,14 +48,14 @@ namespace Nancy.ViewEngines.Razor.HtmlHelpers.Tests
             Assert.Contains("<option selected=\"selected\" value=\"Two\">Two</option>", output.ToHtmlString());
         }
 
-        //[Fact]
-        //public void When_provided_items_generated_from_nested()
-        //{
-        //    var output = helpers.DropDownListFor(x => x.TestNested.LevelTwo.LevelTwoGuid, model.TestNested.LevelTwo.LevelTwoListItems, new { });
+        [Fact]
+        public void When_provided_items_generated_from_nested()
+        {
+            var output = helpers.DropDownListFor(x => x.TestNested.LevelTwo.LevelTwoGuid, model.TestNested.LevelTwo.LevelTwoListItems, new { });
 
-        //    Assert.Contains("<select id=\"LevelTwoGuid\" name=\"LevelTwoGuid\">", output.ToHtmlString());
-        //    Assert.Contains("<option value=\"LEVEL_TWO_VALUE\">LEVEL_TWO_TEXT</option>", output.ToHtmlString());
-        //}
+            Assert.Contains("<select id=\"TestNested_LevelTwo_LevelTwoGuid\" name=\"TestNested.LevelTwo.LevelTwoGuid\">", output.ToHtmlString());
+            Assert.Contains("<option value=\"LEVEL_TWO_VALUE\">LEVEL_TWO_TEXT</option>", output.ToHtmlString());
+        }
 
         [Fact]
         public void When_provided_item_with_displayname_label()
